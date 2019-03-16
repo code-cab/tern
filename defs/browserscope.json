@@ -2,7 +2,7 @@
   "!name": "browserscope",
   "!define": {
   },
-  window: {
+  "window": {
     "!type": "<top>",
     "!doc": "Top level Browser window scope"
   }
