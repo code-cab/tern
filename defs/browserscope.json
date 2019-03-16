@@ -1,0 +1,9 @@
+{
+  "!name": "browserscope",
+  "!define": {
+  },
+  window: {
+    "!type": "<top>",
+    "!doc": "Top level Browser window scope"
+  }
+}
