@@ -167,3 +167,37 @@ function paramProperties(employee) {
 function arrayParamProperties(employees) {
   employees; //:: [{department: string, name: string}]
 }
+
+/**
+ * @enum {string}
+ */
+const BorderEnum = {
+    none: 'none',
+    box: 'box',
+    bowl: 'bowl',
+    bottom: 'bottom'
+};
+
+/**
+ * @typedef {Object} HelloBorderValues
+ * @property {number} [left] - Optional value for left border in pixels.
+ * @property {number} [right] - Optional value for right border in pixels.
+ * @property {number} [top] - Optional value for top border in pixels.
+ * @property {number} [bottom] - Optional value for bottom border in pixels.
+ */
+
+/**
+ * @typedef {Object} Hello~Options
+ * @property {(number|string)} width - Width of the stage canvas in pixels
+ * @property {number} height - Height of the stage canvas in pixels
+ * @property {(BorderEnum|HelloBorderValues)} border - World limitations when using Physics
+ */
+
+/** @type {Hello~Options} */
+var myOptions;
+myOptions //: {border, height, width}
+myOptions.height //: number
+myOptions.width //: number|string
+myOptions.border //: BorderEnum|{bottom, left, right, top}
+
+

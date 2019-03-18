@@ -276,7 +276,9 @@
                 break;
             default: {
                 for (var i = 0; i < docType.name.length; i += 1) {
-                    if (!acorn.isIdentifierChar(docType.name.charCodeAt(i)) && docType.name.charCodeAt(i) !== 46) return;
+                    if (!acorn.isIdentifierChar(docType.name.charCodeAt(i)) &&
+                        docType.name.charAt(i) !== '.' &&
+                        docType.name.charAt(i) !== '~') return;
                 }
                 var path = docType.name;
                 var cx = infer.cx(), defs = cx.parent && cx.parent.mod.jsdocTypedefs, found;
