@@ -1,0 +1,25 @@
+{
+  "!define": {
+    "on.!2": {
+      "border": {
+        "!default": "\"Hallo\"",
+        "!doc": "World limitations when using Physics",
+        "!type": "string"
+      },
+      "height": {
+        "!doc": "Height of the stage canvas in pixels",
+        "!type": "number"
+      },
+      "width": {
+        "!doc": "Width of the stage canvas in pixels",
+        "!type": "number"
+      }
+    }
+  },
+  "!name": "_doctest.js",
+  "on": {
+    "!doc": "@param {string} [eventName] - Eventname\n@param {(string|number)} [doubleThing]\n@param {SomeDef} [options] - Options",
+    "!span": "421[13:9]-423[13:11]",
+    "!type": "fn(eventName?: string, doubleThing?: string|number, options?: on.!2)"
+  }
+}

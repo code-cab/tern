@@ -28,6 +28,10 @@
         server.on("postLoadDef", postLoadDef);
     });
 
+    function getJsdocTypedefs(cx) {
+        return cx.parent.mod._jsdocTypedefs
+    }
+
     function postParse(ast, text) {
         function attachComments(node) {
             comment.ensureCommentsBefore(text, node);
@@ -287,6 +291,7 @@
                 } else if (found = infer.def.parsePath(path, scope).getObjType()) {
                     type = maybeInstance(found, path);
                 } else {
+                    // Create as separate module when possible or else use default jsdocPlaceholders:
                     if (!cx.jsdocPlaceholders) cx.jsdocPlaceholders = Object.create(null);
                     if (!(path in cx.jsdocPlaceholders))
                         type = cx.jsdocPlaceholders[path] = new infer.Obj(null, path);
@@ -306,6 +311,7 @@
         if (!docType || !docType.type) return;
 
         var type, inner, madeUp = false, isOptional = false, i;
+        var tag = _currTag(doc);
 
         switch (docType.type) {
             case 'UnionType':
@@ -381,6 +387,7 @@
                 inner = parseNameExpression(scope, doc, docType);
                 if (inner) {
                     type = inner.type;
+                    // Added for CodeCab
                     madeUp = madeUp || inner.madeUp;
                     isOptional = isOptional || inner.isOptional;
                 }
@@ -397,20 +404,25 @@
 
     function parseType(scope, doc, pos) {
         var madeUp = false, isOptional = false;
+        var defaultValue;
 
         var tag = _currTag(doc);
 
         isOptional = tag.default !== undefined;
+        if (tag.default) {
+            defaultValue = tag.default;
+        }
 
         if (!tag.type) tag.type = {
             type: 'NameExpression',
-            name: tag.name
+            name: tag.name,
         };
+        tag.type.default = tag.default;
         var inner = interpretType(scope, doc, tag.type);
 
 
         if (!inner) return null;
-        return {type: inner.type, end: pos, isOptional: inner.isOptional, madeUp: inner.madeUp};
+        return {type: inner.type, end: pos, isOptional: inner.isOptional, madeUp: inner.madeUp, defaultValue: defaultValue};
     }
 
 
@@ -538,9 +550,14 @@
             var parsed = parseTypeOuter(scope, doc, 0);
             var name = tag.name;
             while (_nextTag(doc)) {
+                let currTag = _currTag(doc);
                 var propType = parseTypeOuter(scope, doc, 0);
                 var propName = _currTag(doc).name;
                 if (propType && propName) {
+                    let propAval = parsed.type.defProp(propName);
+                    // Added for CodeCab
+                    if (currTag.description) propAval.doc = currTag.description;
+                    if (propType.defaultValue) propAval.default = propType.defaultValue;
                     propType.type.propagate(parsed.type.defProp(propName));
                 }
             }

@@ -191,13 +191,14 @@ const BorderEnum = {
  * @property {(number|string)} width - Width of the stage canvas in pixels
  * @property {number} height - Height of the stage canvas in pixels
  * @property {(BorderEnum|HelloBorderValues)} border - World limitations when using Physics
+ * @property {(string|HelloBorderValues)} [border2="none","bowl","box","bottom"] - World limitations when using Physics
  */
 
 /** @type {Hello~Options} */
 var myOptions;
-myOptions //: {border, height, width}
+myOptions //: {border, border2, height, width}
 myOptions.height //: number
 myOptions.width //: number|string
 myOptions.border //: BorderEnum|{bottom, left, right, top}
-
+myOptions.border2 //: string|{bottom, left, right, top}
 

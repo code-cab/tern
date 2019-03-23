@@ -3,6 +3,8 @@ var tern = require("../lib/tern"), condense = require("../lib/condense");
 var fs = require("fs"), path = require("path");
 require("../plugin/angular");
 require("../plugin/node");
+require('../plugin/doc_comment');
+require('../plugin/requirejs');
 
 var condenseDir = "test/condense";
 function jsonFile(name) { return util.resolve(condenseDir + "/" + name.replace(/\.js$/, ".json")); }
@@ -87,5 +89,6 @@ exports.runTests = function(filter) {
   // referring to !requirejs.requirejs_const.
   test({load: ["requirejs_const", "requirejs_dep"], include: ["requirejs_dep", "requirejs_const"], plugins: {requirejs: true}});
 
-  test("recursive");
+  test({load: ["_doctest"], plugins: {doc_comment: true}});
+    test("recursive");
 };
