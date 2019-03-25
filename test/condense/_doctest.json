@@ -4,11 +4,7 @@
       "border": {
         "!default": "\"Hallo\"",
         "!doc": "World limitations when using Physics. Values are \"bowl\", \"border\", \"box\" or \"none\"",
-        "!type": "string|Test.!2.border_1"
-      },
-      "border_1": {
-        "left": "number",
-        "right": "number"
+        "!type": "string|Test.!2.border.!1"
       },
       "height": {
         "!doc": "Height of the stage canvas in pixels",
@@ -18,6 +14,10 @@
         "!doc": "Width of the stage canvas in pixels",
         "!type": "number|string"
       }
+    },
+    "Test.!2.border.!1": {
+      "left": "number",
+      "right": "number"
     }
   },
   "!name": "_doctest.js",
