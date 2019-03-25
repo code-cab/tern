@@ -1,3 +1,10 @@
 {
+  "!define": {
+    "!modules": {
+      "node_require_private`js": {
+        "!span": "0[0:0]-146[3:0]"
+      }
+    }
+  },
   "!name": "node_require_private.js"
 }
