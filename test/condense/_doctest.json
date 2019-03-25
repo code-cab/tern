@@ -1,10 +1,14 @@
 {
   "!define": {
-    "on.!2": {
+    "Test.!2": {
       "border": {
         "!default": "\"Hallo\"",
-        "!doc": "World limitations when using Physics",
-        "!type": "string"
+        "!doc": "World limitations when using Physics. Values are \"bowl\", \"border\", \"box\" or \"none\"",
+        "!type": "string|Test.!2.border_1"
+      },
+      "border_1": {
+        "left": "number",
+        "right": "number"
       },
       "height": {
         "!doc": "Height of the stage canvas in pixels",
@@ -12,14 +16,18 @@
       },
       "width": {
         "!doc": "Width of the stage canvas in pixels",
-        "!type": "number"
+        "!type": "number|string"
       }
     }
   },
   "!name": "_doctest.js",
-  "on": {
-    "!doc": "@param {string} [eventName] - Eventname\n@param {(string|number)} [doubleThing]\n@param {SomeDef} [options] - Options",
-    "!span": "421[13:9]-423[13:11]",
-    "!type": "fn(eventName?: string, doubleThing?: string|number, options?: on.!2)"
+  "SomeBase": {
+    "!doc": "Parameter description\n@typedef {Object} SomeDef\n@property {(string|SomeOtherDef)} [border=\"Hallo\"] - World limitations when using Physics. Values are \"bowl\", \"border\", \"box\" or \"none\"\n@property {number|string} [width] - Width of the stage canvas in pixels\n@property {number} [height] - Height of the stage canvas in pixels",
+    "!span": "455[14:6]-463[14:14]",
+    "!type": "fn()"
+  },
+  "Test": {
+    "!span": "497[19:6]-501[19:10]",
+    "!type": "fn(eventName?: string, doubleThing?: string|number, options?: Test.!2)"
   }
 }

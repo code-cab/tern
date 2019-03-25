@@ -5,6 +5,7 @@ require("../plugin/angular");
 require("../plugin/node");
 require('../plugin/doc_comment');
 require('../plugin/requirejs');
+require('../plugin/modules');
 
 var condenseDir = "test/condense";
 function jsonFile(name) { return util.resolve(condenseDir + "/" + name.replace(/\.js$/, ".json")); }
@@ -58,8 +59,8 @@ exports.runTests = function(filter) {
     util.addFile();
     runTest(options);
   }
-
   test("basic");
+
   test("fn");
   test("add_to_old");
   test({load: ["ignore_newer", "extend_foo"],
@@ -89,6 +90,8 @@ exports.runTests = function(filter) {
   // referring to !requirejs.requirejs_const.
   test({load: ["requirejs_const", "requirejs_dep"], include: ["requirejs_dep", "requirejs_const"], plugins: {requirejs: true}});
 
-  test({load: ["_doctest"], plugins: {doc_comment: true}});
     test("recursive");
+
+ test({load: ["_doctest"], plugins: {doc_comment: true}});
+
 };

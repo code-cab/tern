@@ -1,14 +1,30 @@
 /**
- * Parameter description
- * @typedef {Object} SomeDef
- * @property {number} [width] - Width of the stage canvas in pixels
- * @property {number} [height] - Height of the stage canvas in pixels
- * @property {string} [border="Hallo"] - World limitations when using Physics
+ * @typedef {Object} SomeOtherDef
+ * @property {number} [left]
+ * @property {number} [right]
  */
 
 /**
- * @param {string} [eventName] - Eventname
- * @param {(string|number)} [doubleThing]
- * @param {SomeDef} [options] - Options
+ * Parameter description
+ * @typedef {Object} SomeDef
+ * @property {(string|SomeOtherDef)} [border="Hallo"] - World limitations when using Physics. Values are "bowl", "border", "box" or "none"
+ * @property {number|string} [width] - Width of the stage canvas in pixels
+ * @property {number} [height] - Height of the stage canvas in pixels
  */
-function on(eventName, doubleThing, options) {}
+
+class SomeBase {
+    constructor() {}
+}
+
+
+class Test extends SomeBase {
+    /**
+     * @param {string} [eventName] - Eventname
+     * @param {(string|number)} [doubleThing]
+     * @param {SomeDef} [options] - Options
+     */
+    constructor(eventName, doubleThing, options) {
+        super();
+    }
+
+}
