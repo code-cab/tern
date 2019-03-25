@@ -24,10 +24,17 @@
   "SomeBase": {
     "!doc": "Parameter description\n@typedef {Object} SomeDef\n@property {(string|SomeOtherDef)} [border=\"Hallo\"] - World limitations when using Physics. Values are \"bowl\", \"border\", \"box\" or \"none\"\n@property {number|string} [width] - Width of the stage canvas in pixels\n@property {number} [height] - Height of the stage canvas in pixels",
     "!span": "455[14:6]-463[14:14]",
-    "!type": "fn()"
+    "!type": "fn()",
+    "prototype": {
+      "!span": "449[14:0]-488[16:1]"
+    }
   },
   "Test": {
     "!span": "497[19:6]-501[19:10]",
-    "!type": "fn(eventName?: string, doubleThing?: string|number, options?: Test.!2)"
+    "!type": "fn(eventName?: string, doubleThing?: string|number, options?: Test.!2)",
+    "prototype": {
+      "!proto": "SomeBase.prototype",
+      "!span": "491[19:0]-750[29:1]"
+    }
   }
 }
