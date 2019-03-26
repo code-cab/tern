@@ -280,7 +280,7 @@
                 type = new infer.Obj(true);
                 break;
             case 'function':
-                type = new infer.Fn(undefined, undefined, [], [], infer.ANull);
+                type = new infer.Fn(undefined, infer.ANull, [], [], infer.ANull);
                 break;
             case 'array':
                 type = new infer.Arr();
