@@ -253,6 +253,10 @@
 
     }
 
+    function parseCallback(scope, doc, docType) {
+        if (!docType.name) return;
+    }
+
     function parseNameExpression(scope, doc, docType) {
         if (!docType.name) return;
         var type, madeUp = false;
@@ -274,6 +278,9 @@
                 break;
             case 'object':
                 type = new infer.Obj(true);
+                break;
+            case 'function':
+                type = new infer.Fn(undefined, undefined, [], [], infer.ANull);
                 break;
             case 'array':
                 type = new infer.Arr();
@@ -383,6 +390,8 @@
                 }
                 type = new infer.Arr(inAnglesTypes);
                 break;
+            case 'Callback':
+                break;
             case 'NameExpression':
                 inner = parseNameExpression(scope, doc, docType);
                 if (inner) {
@@ -449,6 +458,10 @@
     function _nextTag(doc) {
         doc.currTag += 1;
         return _currTag(doc);
+    }
+
+    function parseDoc() {
+
     }
 
     function jsdocInterpretComments(node, scope, aval, comments) {
@@ -542,24 +555,41 @@
         var commentRe = /(\/\*\*[\s\S]*?\*\/)/g, commentResult;
         while ((commentResult = commentRe.exec(text))) {
             var comment = commentResult[1];
-            if (comment.indexOf('@typedef') < 0) continue;
+            if (comment.indexOf('@typedef') < 0 && comment.indexOf('@callback') < 0) continue;
             var doc = doctrine.parse(comment, {unwrap: true, sloppy: true, recoverable: true});
             var tag;
             doc.currTag = 0;
             if (!(tag = _currTag(doc))) return;
+
+            if (!tag.type && tag.title === 'callback' && tag.description) {
+                tag.type = {
+                    type: 'NameExpression',
+                    name: 'Function',
+                };
+                tag.name = /[\w~#]*/.exec(tag.description)[0];
+
+            }
+
             var parsed = parseTypeOuter(scope, doc, 0);
             var name = tag.name;
             while (_nextTag(doc)) {
                 let currTag = _currTag(doc);
                 var propType = parseTypeOuter(scope, doc, 0);
                 var propName = _currTag(doc).name;
-                if (propType && propName) {
+
+                if (currTag.title === 'property' && propType && propName && parsed.type instanceof infer.Obj) {
                     let propAval = parsed.type.defProp(propName);
                     // Added for CodeCab
                     if (currTag.description) propAval.doc = currTag.description;
                     if (propType.defaultValue) propAval.default = propType.defaultValue;
                     propType.type.propagate(parsed.type.defProp(propName));
                 }
+                if (currTag.title === 'param' && propType && propName && parsed.type instanceof infer.Fn) {
+                    parsed.type.args.push(propType.type);
+                    parsed.type.argNames.push(propName);
+
+                }
+
             }
             cx.parent.mod.jsdocTypedefs[name] = parsed.type;
             // TODO

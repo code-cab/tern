@@ -59,6 +59,7 @@ exports.runTests = function(filter) {
     util.addFile();
     runTest(options);
   }
+
   test("basic");
 
   test("fn");

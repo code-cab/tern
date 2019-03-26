@@ -12,10 +12,14 @@
  * @property {number} [height] - Height of the stage canvas in pixels
  */
 
+/**
+ * @callback MyCallback
+ * @param {string} event
+ */
+
 class SomeBase {
     constructor() {}
 }
-
 
 class Test extends SomeBase {
     /**
@@ -26,5 +30,11 @@ class Test extends SomeBase {
     constructor(eventName, doubleThing, options) {
         super();
     }
+
+    /**
+     *
+     * @param {MyCallback} callback
+     */
+    onClick(callback) {}
 
 }

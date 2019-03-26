@@ -18,23 +18,29 @@
     "Test.!2.border.!1": {
       "left": "number",
       "right": "number"
-    }
+    },
+    "Test.prototype.onClick.!0": "fn(event: string)"
   },
   "!name": "_doctest.js",
   "SomeBase": {
-    "!doc": "Parameter description\n@typedef {Object} SomeDef\n@property {(string|SomeOtherDef)} [border=\"Hallo\"] - World limitations when using Physics. Values are \"bowl\", \"border\", \"box\" or \"none\"\n@property {number|string} [width] - Width of the stage canvas in pixels\n@property {number} [height] - Height of the stage canvas in pixels",
-    "!span": "455[14:6]-463[14:14]",
+    "!doc": "@callback MyCallback\n@param {string} event",
+    "!span": "513[19:6]-521[19:14]",
     "!type": "fn()",
     "prototype": {
-      "!span": "449[14:0]-488[16:1]"
+      "!span": "507[19:0]-546[21:1]"
     }
   },
   "Test": {
-    "!span": "497[19:6]-501[19:10]",
+    "!span": "554[23:6]-558[23:10]",
     "!type": "fn(eventName?: string, doubleThing?: string|number, options?: Test.!2)",
     "prototype": {
       "!proto": "SomeBase.prototype",
-      "!span": "491[19:0]-750[29:1]"
+      "!span": "548[23:0]-892[39:1]",
+      "onClick": {
+        "!doc": "@param {MyCallback} callback",
+        "!span": "869[37:4]-876[37:11]",
+        "!type": "fn(callback: fn(event: string))"
+      }
     }
   }
 }
