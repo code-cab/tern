@@ -23,6 +23,7 @@
             fullDocs: options && options.fullDocs
         };
 
+        server.on('preCondenseReach', preCondenseReach);
         server.on("postParse", postParse);
         server.on("postInfer", postInfer);
         server.on("postLoadDef", postLoadDef);
@@ -78,6 +79,11 @@
                         scope.getProp(node.id.name),
                         node.scope.fnType);
             },
+            FunctionExpression: function (node, scope) {
+                for (var i = 0; i < node.params.length; i += 1) {
+                    var aval = infer.expressionType({node: node.params[i], state: scope});
+                }
+            },
             ClassDeclaration: function (node, scope) {
                 if (node.commentsBefore)
                     interpretComments(node, node.commentsBefore, scope,
@@ -113,13 +119,28 @@
                 }
             },
             CallExpression: function (node, scope) {
+                var type;
                 if (node.commentsBefore && isDefinePropertyCall(node)) {
-                    var type = infer.expressionType({node: node.arguments[0], state: scope}).getObjType();
+                    type = infer.expressionType({node: node.arguments[0], state: scope}).getObjType();
                     if (type && type instanceof infer.Obj) {
                         var prop = type.props[node.arguments[1].value];
                         if (prop) interpretComments(node, node.commentsBefore, scope, prop);
                     }
                 }
+                if (!type) {
+                    type = infer.expressionType({node: node.callee, state: scope}).getFunctionType();
+                    if (type) {
+                        for (var i = 0; i < type.args.length; i += 1) {
+                            var arg = type.args[i];
+                            for (var j = 0; arg.types && j < arg.types.length; j += 1) {
+                                if (arg.types[j].metaData && arg.types[j].metaData.callback) {
+                                    type.self.propagate(arg.types[j].self);
+                                }
+                            }
+                        }
+                    }
+                }
+
             },
             ExportNamedDeclaration: function (node, scope) {
                 if (node.commentsBefore && node.declaration && node.declaration.type === 'FunctionDeclaration') {
@@ -136,10 +157,27 @@
                 }
             }
         }, infer.searchVisitor, scope);
+
+        walk.simple(ast, {
+            CallExpression: function (node, scope) {
+                console.log('Check callback');
+            }
+        });
+    }
+
+    function preCondenseReach(state) {
+        var typeDefs = infer.cx().parent.mod.jsdocTypedefs;
+        var node = state.roots["!typedef"] = new infer.Obj(null);
+        for (var name in typeDefs) {
+            var typeDef = typeDefs[name];
+            var prop = node.defProp(name);
+            prop.origin = typeDef.origin;
+            typeDef.propagate(prop);
+        }
     }
 
     function postLoadDef(data) {
-        var defs = data["!typedef"];
+        var defs = data["!define"] && data["!define"]["!typedef"];
         var cx = infer.cx(), orig = data["!name"];
         if (defs) for (var name in defs)
             cx.parent.mod.jsdocTypedefs[name] =
@@ -390,8 +428,6 @@
                 }
                 type = new infer.Arr(inAnglesTypes);
                 break;
-            case 'Callback':
-                break;
             case 'NameExpression':
                 inner = parseNameExpression(scope, doc, docType);
                 if (inner) {
@@ -589,6 +625,10 @@
                     parsed.type.argNames.push(propName);
 
                 }
+                if (tag.title === 'callback' && currTag.title === 'this') {
+                    parsed.type.metaData = parsed.type.metaData || {};
+                    parsed.type.metaData.callback = true;
+                }
 
             }
             cx.parent.mod.jsdocTypedefs[name] = parsed.type;
@@ -597,9 +637,9 @@
 
     }
 
-    function propagateWithWeight(type, target) {
+    function propagateWithWeight(type, target, explicitWeight) {
         var weight = infer.cx().parent.mod.docComment.weight;
-        type.type.propagate(target, weight || (type.madeUp ? WG_MADEUP : undefined));
+        type.type.propagate(target, weight || (type.madeUp ? WG_MADEUP : explicitWeight));
     }
 
     function isFunExpr(node) {

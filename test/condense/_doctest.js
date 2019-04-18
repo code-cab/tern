@@ -15,6 +15,7 @@
 /**
  * @callback MyCallback
  * @param {string} event
+ * @this {Test}
  */
 
 class SomeBase {

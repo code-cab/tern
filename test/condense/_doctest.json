@@ -1,10 +1,36 @@
 {
   "!define": {
+    "!typedef": {
+      "MyCallback": {},
+      "SomeDef": {
+        "border": {
+          "!default": "\"Hallo\"",
+          "!doc": "World limitations when using Physics. Values are \"bowl\", \"border\", \"box\" or \"none\"",
+          "!type": "string|!typedef.SomeDef.border.!1"
+        },
+        "height": {
+          "!doc": "Height of the stage canvas in pixels",
+          "!type": "number"
+        },
+        "width": {
+          "!doc": "Width of the stage canvas in pixels",
+          "!type": "number|string"
+        }
+      },
+      "SomeOtherDef": {
+        "left": "number",
+        "right": "number"
+      }
+    },
+    "!typedef.SomeDef.border.!1": {
+      "left": "number",
+      "right": "number"
+    },
     "Test.!2": {
       "border": {
         "!default": "\"Hallo\"",
         "!doc": "World limitations when using Physics. Values are \"bowl\", \"border\", \"box\" or \"none\"",
-        "!type": "string|Test.!2.border.!1"
+        "!type": "string|!typedef.SomeDef.border.!1"
       },
       "height": {
         "!doc": "Height of the stage canvas in pixels",
@@ -23,22 +49,22 @@
   },
   "!name": "_doctest.js",
   "SomeBase": {
-    "!doc": "@callback MyCallback\n@param {string} event",
-    "!span": "513[19:6]-521[19:14]",
+    "!doc": "@callback MyCallback\n@param {string} event\n@this {Test}",
+    "!span": "529[20:6]-537[20:14]",
     "!type": "fn()",
     "prototype": {
-      "!span": "507[19:0]-546[21:1]"
+      "!span": "523[20:0]-562[22:1]"
     }
   },
   "Test": {
-    "!span": "554[23:6]-558[23:10]",
+    "!span": "570[24:6]-574[24:10]",
     "!type": "fn(eventName?: string, doubleThing?: string|number, options?: Test.!2)",
     "prototype": {
       "!proto": "SomeBase.prototype",
-      "!span": "548[23:0]-892[39:1]",
+      "!span": "564[24:0]-908[40:1]",
       "onClick": {
         "!doc": "@param {MyCallback} callback",
-        "!span": "869[37:4]-876[37:11]",
+        "!span": "885[38:4]-892[38:11]",
         "!type": "fn(callback: fn(event: string))"
       }
     }

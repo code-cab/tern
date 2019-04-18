@@ -1,8 +1,21 @@
+/**
+ * @callback MyCallback
+ * @param {string} Eventje - Some event
+ * @this {Test}
+ */
+
 class Test {
-  onClick(callback) {}
+    /**
+     * @param {MyCallback} callback
+     */
+  onClick(callback) {
+  }
 }
 
 var t = new Test();
-t.onClick(function() {
-  this //: Test2
+/**
+ * onClick here
+ */
+t.onClick(function(ev) {
+  this //: Test
 });

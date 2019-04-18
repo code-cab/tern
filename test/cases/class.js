@@ -1,7 +1,7 @@
 class Point2 {
   constructor(x, y) { this.x = x; this.y = y }
   plus(pt) {
-    this //: Point2
+    this //: Point23
     pt //: Point2
     return new Point2(this.x + pt.x, this.y + pt.y)
   }
