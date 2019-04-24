@@ -79,11 +79,11 @@
                         scope.getProp(node.id.name),
                         node.scope.fnType);
             },
-            FunctionExpression: function (node, scope) {
-                for (var i = 0; i < node.params.length; i += 1) {
-                    var aval = infer.expressionType({node: node.params[i], state: scope});
-                }
-            },
+            // FunctionExpression: function (node, scope) {
+            //     for (var i = 0; i < node.params.length; i += 1) {
+            //         var aval = infer.expressionType({node: node.params[i], state: scope});
+            //     }
+            // },
             ClassDeclaration: function (node, scope) {
                 if (node.commentsBefore)
                     interpretComments(node, node.commentsBefore, scope,
@@ -127,19 +127,19 @@
                         if (prop) interpretComments(node, node.commentsBefore, scope, prop);
                     }
                 }
-                if (!type) {
-                    type = infer.expressionType({node: node.callee, state: scope}).getFunctionType();
-                    if (type) {
-                        for (var i = 0; i < type.args.length; i += 1) {
-                            var arg = type.args[i];
-                            for (var j = 0; arg.types && j < arg.types.length; j += 1) {
-                                if (arg.types[j].metaData && arg.types[j].metaData.callback) {
-                                    type.self.propagate(arg.types[j].self);
-                                }
-                            }
-                        }
-                    }
-                }
+                // if (!type) {
+                //     type = infer.expressionType({node: node.callee, state: scope}).getFunctionType();
+                //     if (type) {
+                //         for (var i = 0; i < type.args.length; i += 1) {
+                //             var arg = type.args[i];
+                //             for (var j = 0; arg.types && j < arg.types.length; j += 1) {
+                //                 if (arg.types[j].metaData && arg.types[j].metaData.callback) {
+                //                     type.self.propagate(arg.types[j].self);
+                //                 }
+                //             }
+                //         }
+                //     }
+                // }
 
             },
             ExportNamedDeclaration: function (node, scope) {
@@ -158,16 +158,16 @@
             }
         }, infer.searchVisitor, scope);
 
-        walk.simple(ast, {
-            CallExpression: function (node, scope) {
-                console.log('Check callback');
-            }
-        });
+        // walk.simple(ast, {
+        //     CallExpression: function (node, scope) {
+        //         // console.log('Check callback');
+        //     }
+        // });
     }
 
     function preCondenseReach(state) {
         var typeDefs = infer.cx().parent.mod.jsdocTypedefs;
-        var node = state.roots["!typedef"] = new infer.Obj(null);
+        var node = state.output["!typedef"] = new infer.Obj(null);
         for (var name in typeDefs) {
             var typeDef = typeDefs[name];
             var prop = node.defProp(name);
@@ -177,11 +177,13 @@
     }
 
     function postLoadDef(data) {
-        var defs = data["!define"] && data["!define"]["!typedef"];
+        var defs = data/*["!define"] && data["!define"]*/["!typedef"];
         var cx = infer.cx(), orig = data["!name"];
         if (defs) for (var name in defs)
             cx.parent.mod.jsdocTypedefs[name] =
-                maybeInstance(infer.def.parse(defs[name], orig, name), name);
+                infer.def.parse(defs[name], orig, name);
+            // cx.parent.mod.jsdocTypedefs[name] =
+            //     maybeInstance(infer.def.parse(defs[name], orig, name), name);
     }
 
     // COMMENT INTERPRETATION
@@ -598,11 +600,11 @@
             if (!(tag = _currTag(doc))) return;
 
             if (!tag.type && tag.title === 'callback' && tag.description) {
-                tag.type = {
-                    type: 'NameExpression',
-                    name: 'Function',
-                };
-                tag.name = /[\w~#]*/.exec(tag.description)[0];
+                // tag.type = {
+                //     type: 'NameExpression',
+                //     name: 'Function',
+                // };
+                // tag.name = /[\w~#]*/.exec(tag.description)[0];
 
             }
 
@@ -620,18 +622,18 @@
                     if (propType.defaultValue) propAval.default = propType.defaultValue;
                     propType.type.propagate(parsed.type.defProp(propName));
                 }
-                if (currTag.title === 'param' && propType && propName && parsed.type instanceof infer.Fn) {
+                if (currTag.title === 'param' && parsed && propType && propName && parsed.type instanceof infer.Fn) {
                     parsed.type.args.push(propType.type);
                     parsed.type.argNames.push(propName);
 
                 }
-                if (tag.title === 'callback' && currTag.title === 'this') {
+                if (parsed && tag.title === 'callback' && currTag.title === 'this') {
                     parsed.type.metaData = parsed.type.metaData || {};
                     parsed.type.metaData.callback = true;
                 }
 
             }
-            cx.parent.mod.jsdocTypedefs[name] = parsed.type;
+            if (parsed) cx.parent.mod.jsdocTypedefs[name] = parsed.type;
             // TODO
         }
 
