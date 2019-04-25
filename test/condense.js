@@ -92,6 +92,7 @@ exports.runTests = function(filter) {
   test({load: ["requirejs_const", "requirejs_dep"], include: ["requirejs_dep", "requirejs_const"], plugins: {requirejs: true}});
 
     test("recursive");
- test({load: ["_doctest"], plugins: {doc_comment: true}});
+    test({load: ["_doctest"], plugins: {doc_comment: true}});
+    test({load: ["_doctypedef"], plugins: {doc_comment: true}});
 
 };

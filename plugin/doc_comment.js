@@ -24,6 +24,7 @@
         };
 
         server.on('preCondenseReach', preCondenseReach);
+        server.on('postCondenseReach', postCondenseReach);
         server.on("postParse", postParse);
         server.on("postInfer", postInfer);
         server.on("postLoadDef", postLoadDef);
@@ -166,18 +167,24 @@
     }
 
     function preCondenseReach(state) {
-        var typeDefs = infer.cx().parent.mod.jsdocTypedefs;
-        var node = state.output["!typedef"] = new infer.Obj(null);
+        var typeDefs = state.cx.parent.mod.jsdocTypedefs;
+        var node = state.cx.topScope
+        //var node = state.roots["!typedef"] = new infer.Obj(null);
         for (var name in typeDefs) {
             var typeDef = typeDefs[name];
+            // node[name] = typeDef;
             var prop = node.defProp(name);
             prop.origin = typeDef.origin;
             typeDef.propagate(prop);
         }
     }
 
+    function postCondenseReach(state) {
+        console.log('stop');
+    }
+
     function postLoadDef(data) {
-        var defs = data/*["!define"] && data["!define"]*/["!typedef"];
+        var defs = data["!define"] && data["!define"]["!typedef"];
         var cx = infer.cx(), orig = data["!name"];
         if (defs) for (var name in defs)
             cx.parent.mod.jsdocTypedefs[name] =
