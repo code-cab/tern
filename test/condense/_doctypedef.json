@@ -1,16 +1,18 @@
 {
   "!name": "_doctypedef.js",
   "!define": {
-    "!typedef": {
-      "SomeOtherDef": {
-        "left": "number",
-        "right": "number"
-      }
+    "test.!0": {
+      "left": "number",
+      "right": "number"
     }
   },
   "test": {
-    "!type": "fn(myDef: !typedef.SomeOtherDef)",
+    "!type": "fn(myDef: SomeOtherDef)",
     "!span": "153[10:9]-157[10:13]",
     "!doc": "@param {SomeOtherDef} myDef"
+  },
+  "SomeOtherDef": {
+    "left": "number",
+    "right": "number"
   }
 }

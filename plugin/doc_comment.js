@@ -168,29 +168,54 @@
 
     function preCondenseReach(state) {
         var typeDefs = state.cx.parent.mod.jsdocTypedefs;
-        var node = state.cx.topScope
-        //var node = state.roots["!typedef"] = new infer.Obj(null);
+        var node = state.cx.topScope;
+        // var node = state.roots["!typedef"] = new infer.Obj(null);
+        // if (!state.cx.localDefs) state.cx.localDefs = new infer.Obj(null);
+        // var node = state.cx.localDefs;
+
         for (var name in typeDefs) {
             var typeDef = typeDefs[name];
             // node[name] = typeDef;
             var prop = node.defProp(name);
             prop.origin = typeDef.origin;
+            prop.metaData = prop.metaData || {};
+            prop.metaData.typeDef = true;
             typeDef.propagate(prop);
         }
     }
 
     function postCondenseReach(state) {
-        console.log('stop');
+        // var typeDefPaths = [];
+        // var typeDefs = state.cx.parent.mod.jsdocTypedefs;
+        // var node = state.roots["!typedef"];
+        // for (var name in typeDefs) {
+        //     var typeDef = typeDefs[name];
+        //     if (typeDef.path) typeDefPaths.push(typeDef.path);
+        // }
+        // for (var path in state.types) {
+        //     var found = typeDefPaths.find(p => path.indexOf(p) == 0);
+        //     if (found !== undefined) {
+        //         node[path] = state.types[path];
+        //         delete state.types[path];
+        //     }
+        // }
     }
 
     function postLoadDef(data) {
-        var defs = data["!define"] && data["!define"]["!typedef"];
+        var defs = data["!define"];
+        for (var name in data) {
+            var def = data[name];
+        }
         var cx = infer.cx(), orig = data["!name"];
-        if (defs) for (var name in defs)
+        if (defs) for (var name in defs) {
+            var def = defs[name];
+            if (!def || !def['!data'] || !def['!data'].typeDef) {
+                continue;
+            }
             cx.parent.mod.jsdocTypedefs[name] =
-                infer.def.parse(defs[name], orig, name);
-            // cx.parent.mod.jsdocTypedefs[name] =
-            //     maybeInstance(infer.def.parse(defs[name], orig, name), name);
+                //maybeInstance(infer.def.parse(def, orig, name), name);
+                infer.def.parse(def, orig, name);
+        }
     }
 
     // COMMENT INTERPRETATION

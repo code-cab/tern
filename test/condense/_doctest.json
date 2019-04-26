@@ -1,72 +1,71 @@
 {
-  "!name": "_doctest.js",
   "!define": {
     "Test.!2": {
       "border": {
-        "!type": "string|!typedef.SomeOtherDef",
+        "!default": "\"Hallo\"",
         "!doc": "World limitations when using Physics. Values are \"bowl\", \"border\", \"box\" or \"none\"",
-        "!default": "\"Hallo\""
-      },
-      "width": {
-        "!type": "number|string",
-        "!doc": "Width of the stage canvas in pixels"
+        "!type": "string|SomeOtherDef"
       },
       "height": {
-        "!type": "number",
-        "!doc": "Height of the stage canvas in pixels"
+        "!doc": "Height of the stage canvas in pixels",
+        "!type": "number"
+      },
+      "width": {
+        "!doc": "Width of the stage canvas in pixels",
+        "!type": "number|string"
       }
     },
     "Test.!2.border.!1": {
       "left": "number",
       "right": "number"
     },
-    "!typedef": {
-      "SomeOtherDef": {
-        "left": "number",
-        "right": "number"
-      },
-      "SomeDef": {
-        "border": {
-          "!type": "string|!typedef.SomeOtherDef",
-          "!doc": "World limitations when using Physics. Values are \"bowl\", \"border\", \"box\" or \"none\"",
-          "!default": "\"Hallo\""
-        },
-        "width": {
-          "!type": "number|string",
-          "!doc": "Width of the stage canvas in pixels"
-        },
-        "height": {
-          "!type": "number",
-          "!doc": "Height of the stage canvas in pixels"
-        }
-      },
-      "MyCallback": {
-        "!type": "fn(event: string)",
-        "!data": {
-          "callback": true
-        }
-      }
-    }
+    "Test.prototype.onClick.!0": {}
   },
+  "!name": "_doctest.js",
   "SomeBase": {
+    "!doc": "@callback MyCallback\n@param {string} event\n@this {Test}",
+    "!span": "529[20:6]-537[20:14]",
+    "!type": "fn()",
     "prototype": {
       "!span": "523[20:0]-562[22:1]"
+    }
+  },
+  "SomeDef": {
+    "!data": {
+      "typeDef": true
     },
-    "!type": "fn()",
-    "!span": "529[20:6]-537[20:14]",
-    "!doc": "@callback MyCallback\n@param {string} event\n@this {Test}"
+    "border": {
+      "!default": "\"Hallo\"",
+      "!doc": "World limitations when using Physics. Values are \"bowl\", \"border\", \"box\" or \"none\"",
+      "!type": "string|SomeOtherDef"
+    },
+    "height": {
+      "!doc": "Height of the stage canvas in pixels",
+      "!type": "number"
+    },
+    "width": {
+      "!doc": "Width of the stage canvas in pixels",
+      "!type": "number|string"
+    }
+  },
+  "SomeOtherDef": {
+    "!data": {
+      "typeDef": true
+    },
+    "left": "number",
+    "right": "number"
   },
   "Test": {
+    "!span": "570[24:6]-574[24:10]",
+    "!type": "fn(eventName?: string, doubleThing?: string|number, options?: SomeDef)",
     "prototype": {
-      "onClick": {
-        "!type": "fn(callback: fn(event: string))",
-        "!span": "885[38:4]-892[38:11]",
-        "!doc": "@param {MyCallback} callback"
-      },
       "!proto": "SomeBase.prototype",
-      "!span": "564[24:0]-908[40:1]"
-    },
-    "!type": "fn(eventName?: string, doubleThing?: string|number, options?: !typedef.SomeDef)",
-    "!span": "570[24:6]-574[24:10]"
+      "!span": "564[24:0]-908[40:1]",
+      "onClick": {
+        "!doc": "@param {MyCallback} callback",
+        "!span": "885[38:4]-892[38:11]",
+        "!type": "fn(callback: Test.prototype.onClick.!0)"
+      }
+    }
   }
 }
